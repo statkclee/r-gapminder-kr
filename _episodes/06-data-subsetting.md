@@ -1384,7 +1384,7 @@ be changed with the third argument, `drop = FALSE`).
 >    {: .language-r}
 >
 > 4. Extract the first row, and the fourth and fifth columns
->   (`lifeExp` and `gdpPercap`).
+>   (`continent` and `lifeExp`).
 >
 >    
 >    ~~~
@@ -1433,7 +1433,8 @@ be changed with the third argument, `drop = FALSE`).
 > >    {: .language-r}
 > >
 > > 4. Extract the first row, and the fourth and fifth columns
-> >   (`lifeExp` and `gdpPercap`).
+> >   (`continent` and `lifeExp`).
+
 > >
 > >    
 > >    ~~~
