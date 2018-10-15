@@ -443,23 +443,7 @@ ggsave(filename = "results/lifeExp.png", plot = lifeExp_plot, width = 12, height
 
 
 ~~~
-Warning in grDevices::png(..., res = dpi, units = "in"): 쓰기 위해서 파일
-'results/lifeExp.png'를 열 수 없습니다
-~~~
-{: .error}
-
-
-
-~~~
-Warning in grDevices::png(..., res = dpi, units = "in"): opening device
-failed
-~~~
-{: .error}
-
-
-
-~~~
-Error in grDevices::png(..., res = dpi, units = "in"): png() 장치를 시작할 수 없습니다
+Error in grDevices::dev.off(): QuartzBitmap_Output - unable to open file 'results/lifeExp.png'
 ~~~
 {: .error}
 

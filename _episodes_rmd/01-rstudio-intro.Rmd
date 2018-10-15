@@ -7,10 +7,6 @@ questions:
 - "어떻게 R과 인터랙티브하는가?"
 - "작업환경을 어떻게 관리하는가?"
 - "팩키지는 어떻게 설치하는가?"
-- "How to find your way around RStudio?"
-- "How to interact with R?"
-- "How to manage your environment?"
-- "How to install packages?"
 objectives:
 - "RStudio IDE 각 패널의 목적과 사용법을 기술한다."
 - "RStudio IDE 개발환경에 나온 다양한 창에 친숙해진다."
