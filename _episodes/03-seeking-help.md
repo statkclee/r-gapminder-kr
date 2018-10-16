@@ -122,30 +122,28 @@ Platform: x86_64-apple-darwin15.6.0 (64-bit)
 Running under: macOS High Sierra 10.13.6
 
 Matrix products: default
-BLAS: /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+BLAS: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRblas.0.dylib
 LAPACK: /Library/Frameworks/R.framework/Versions/3.5/Resources/lib/libRlapack.dylib
 
 locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+[1] ko_KR.UTF-8/ko_KR.UTF-8/ko_KR.UTF-8/C/ko_KR.UTF-8/ko_KR.UTF-8
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] tidyr_0.8.1      bindrcpp_0.2.2   dplyr_0.7.6      plyr_1.8.4      
- [5] checkpoint_0.4.5 stringr_1.3.1    knitr_1.20       extrafont_0.17  
- [9] ggthemes_4.0.0   ggplot2_3.0.0   
+[1] checkpoint_0.4.5 stringr_1.3.1    knitr_1.20       extrafont_0.17  
+[5] ggthemes_4.0.0   ggplot2_3.0.0   
 
 loaded via a namespace (and not attached):
- [1] Rcpp_0.12.18     pillar_1.3.0     compiler_3.5.1   highr_0.7       
- [5] bindr_0.1.1      tools_3.5.1      digest_0.6.15    evaluate_0.11   
- [9] tibble_1.4.2     gtable_0.2.0     pkgconfig_2.0.1  rlang_0.2.2     
-[13] cli_1.0.0        rstudioapi_0.7   yaml_2.2.0       Rttf2pt1_1.3.7  
-[17] withr_2.1.2      grid_3.5.1       tidyselect_0.2.4 glue_1.3.0      
-[21] R6_2.2.2         fansi_0.2.3      purrr_0.2.5      extrafontdb_1.0 
-[25] magrittr_1.5     scales_1.0.0     assertthat_0.2.0 colorspace_1.3-2
-[29] labeling_0.3     utf8_1.1.4       stringi_1.2.4    lazyeval_0.2.1  
-[33] munsell_0.5.0    crayon_1.3.4    
+ [1] Rcpp_0.12.18     Rttf2pt1_1.3.7   bindr_0.1.1      magrittr_1.5    
+ [5] tidyselect_0.2.4 munsell_0.5.0    colorspace_1.3-2 R6_2.2.2        
+ [9] rlang_0.2.2      plyr_1.8.4       dplyr_0.7.6      tools_3.5.1     
+[13] grid_3.5.1       gtable_0.2.0     extrafontdb_1.0  withr_2.1.2     
+[17] lazyeval_0.2.1   assertthat_0.2.0 tibble_1.4.2     crayon_1.3.4    
+[21] bindrcpp_0.2.2   purrr_0.2.5      evaluate_0.11    glue_1.3.0      
+[25] stringi_1.2.4    compiler_3.5.1   pillar_1.3.0     scales_1.0.0    
+[29] pkgconfig_2.0.1 
 ~~~
 {: .output}
 

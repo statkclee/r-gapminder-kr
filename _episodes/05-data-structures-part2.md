@@ -158,8 +158,8 @@ cats <- rbind(cats, newRow)
 
 
 ~~~
-Warning in `[<-.factor`(`*tmp*`, ri, value = "tortoiseshell"): invalid
-factor level, NA generated
+Warning in `[<-.factor`(`*tmp*`, ri, value = "tortoiseshell"): 요인의 수준
+(factor level)이 올바르지 않아 NA가 생성되었습니다.
 ~~~
 {: .error}
 

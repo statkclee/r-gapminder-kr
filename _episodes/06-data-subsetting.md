@@ -616,7 +616,7 @@ x[-"a"]
 
 
 ~~~
-Error in -"a": invalid argument to unary operator
+Error in -"a": 단항연산자에 유효한 인자가 아닙니다
 ~~~
 {: .error}
 
@@ -647,8 +647,8 @@ x[names(x)!=c("a","c")]
 
 
 ~~~
-Warning in names(x) != c("a", "c"): longer object length is not a multiple
-of shorter object length
+Warning in names(x) != c("a", "c"): 두 객체의 길이가 서로 배수관계에 있지
+않습니다
 ~~~
 {: .error}
 
@@ -677,8 +677,8 @@ names(x) != c("a", "c")
 
 
 ~~~
-Warning in names(x) != c("a", "c"): longer object length is not a multiple
-of shorter object length
+Warning in names(x) != c("a", "c"): 두 객체의 길이가 서로 배수관계에 있지
+않습니다
 ~~~
 {: .error}
 
@@ -941,7 +941,7 @@ m[, c(3,6)]
 
 
 ~~~
-Error in m[, c(3, 6)]: subscript out of bounds
+Error in m[, c(3, 6)]: 첨자의 허용 범위를 벗어났습니다
 ~~~
 {: .error}
 
@@ -1124,7 +1124,7 @@ xlist[[1:2]]
 
 
 ~~~
-Error in xlist[[1:2]]: subscript out of bounds
+Error in xlist[[1:2]]: 첨자의 허용 범위를 벗어났습니다
 ~~~
 {: .error}
 

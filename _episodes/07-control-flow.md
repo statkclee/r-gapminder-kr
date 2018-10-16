@@ -197,8 +197,8 @@ Did anyone get a warning message like this?
 
 
 ~~~
-Warning in if (gapminder$year == 2012) {: the condition has length > 1 and
-only the first element will be used
+Warning in if (gapminder$year == 2012) {: length > 1 이라는 조건이 있고, 첫
+번째 요소만이 사용될 것입니다
 ~~~
 {: .error}
 

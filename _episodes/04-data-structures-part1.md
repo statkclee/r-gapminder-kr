@@ -151,8 +151,8 @@ cats$weight + cats$coat
 
 
 ~~~
-Warning in Ops.factor(cats$weight, cats$coat): '+' not meaningful for
-factors
+Warning in Ops.factor(cats$weight, cats$coat): 요인(factors)에 대하여 의미
+있는 '+'가 아닙니다.
 ~~~
 {: .error}
 
@@ -309,7 +309,8 @@ cats$weight + 2
 
 
 ~~~
-Warning in Ops.factor(cats$weight, 2): '+' not meaningful for factors
+Warning in Ops.factor(cats$weight, 2): 요인(factors)에 대하여 의미있는
+'+'가 아닙니다.
 ~~~
 {: .error}
 

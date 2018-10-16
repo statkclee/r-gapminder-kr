@@ -696,7 +696,7 @@ function (name, pos = -1L, envir = as.environment(pos), all.names = FALSE,
     }
     else all.names
 }
-<bytecode: 0x102cce748>
+<bytecode: 0x7fde4aea8278>
 <environment: namespace:base>
 ~~~
 {: .output}
@@ -735,7 +735,7 @@ rm(list <- ls())
 
 
 ~~~
-Error in rm(list <- ls()): ... must contain names or character strings
+Error in rm(list <- ls()): ...는 반드시 이름 또는 문자열을 포함하고 있어야 합니다
 ~~~
 {: .error}
 

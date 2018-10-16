@@ -295,7 +295,7 @@ fahr_to_kelvin(temp = as.factor(32))
 
 
 ~~~
-Error in fahr_to_kelvin(temp = as.factor(32)): is.numeric(temp) is not TRUE
+Error in fahr_to_kelvin(temp = as.factor(32)): is.numeric(temp)는 TRUE가 아닙니다
 ~~~
 {: .error}
 
