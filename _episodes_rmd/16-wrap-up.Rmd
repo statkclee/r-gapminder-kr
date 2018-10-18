@@ -45,7 +45,7 @@ source: Rmd
 > `ProjectTemplate`과 기능에 대한 자세한 사항은
 > [ProjectTemplate](http://projecttemplate.net/index.html) 홈페이지를 방문한다.
 >
-{.callout}
+{: .callout}
 
 
 ## 가독성 높은 코드를 생성한다.
