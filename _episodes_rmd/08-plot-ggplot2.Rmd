@@ -256,9 +256,9 @@ ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
 >
 > > ## 도전과제 4a에 대한 해답
 > >
-> 바로 앞 예제에서 점 계층에 나온 점 크기와 색상을 변경하라.
->
-> **힌트:** `aes` 함수를 사용하지 않는다.
+> > 바로 앞 예제에서 점 계층에 나온 점 크기와 색상을 변경하라.
+> > 
+> > **힌트:** `aes` 함수를 사용하지 않는다.
 > >
 > > ```{r ch4a-sol}
 > > ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp)) +
