@@ -70,7 +70,7 @@ dev.off()
 > `pdf` 명령어를 다시 작성해서 pdf 파일에 두번째 페이지를 찍는다.
 > 각 창 패널에 대륙별로 데이터를 패싯 도표(힌트: `facet_grid` 사용)로 출력한다.
 > 
-> ## 도전과제 1에 대한 해답
+> > ## 도전과제 1에 대한 해답
 > >
 > > ```{r, eval = FALSE}
 > > pdf("Life_Exp_vs_time.pdf", width = 12, height = 4)
