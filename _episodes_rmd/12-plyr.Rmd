@@ -1,13 +1,13 @@
 ---
-title: Splitting and Combining Data Frames with plyr
+title: plyr로 데이터프레임을 쪼개고 합치기
 teaching: 30
 exercises: 30
 questions:
-- "How can I do different calculations on different sets of data?"
+- "어떻게 하면 다른 데이터에 다른 연산작을 수행할 수 있을까요?"
 objectives:
-- "To be able to use the split-apply-combine strategy for data analysis."
+- "자료분석에 분할-적용-병합(split-apply-combine) 전략을 활용한다."
 keypoints:
-- "Use the `plyr` package to split data, apply functions to subsets, and combine the results."
+- "`plyr` 팩키지를 사용해서 데이터를 쪼개고, 쪼개진 데이터별로 함수를 적용시키고 나서, 결과를 조합한다."
 source: Rmd
 ---
 
@@ -18,10 +18,11 @@ knitr_fig_path("12-")
 gapminder <- read.csv("data/gapminder_data.csv", header=TRUE)
 ```
 
-Previously we looked at how you can use functions to simplify your code.
-We defined the `calcGDP` function, which takes the gapminder dataset,
-and multiplies the population and GDP per capita column. We also defined
-additional arguments so we could filter by `year` and `country`:
+앞서, 함수를 사용해서 코드를 단순화하는 방법을 살펴봤다.
+`gapminder` 데이터셋을 인자로 받아, `인구(population)`와 `인당 GDP`를 곱해 GPD를 계산하는 
+`calcGDP` 함수를 정의했다. 
+추가적인 인자를 정의해서, `year` 연도별, `country` 국가별 필터를 적용할 수도 있다:
+
 
 ```{r}
 # Takes a dataset and multiplies the population column
@@ -40,12 +41,11 @@ calcGDP <- function(dat, year=NULL, country=NULL) {
 }
 ```
 
-A common task you'll encounter when working with data, is that you'll want to
-run calculations on different groups within the data. In the above, we were
-simply calculating the GDP by multiplying two columns together. But what if
-we wanted to calculated the mean GDP per continent?
+데이터 작업을 할 때, 흔히 마주치는 작업이 집단별 그룹으로 묶어 계산하는 것이다.
+위에서, 단순히 두 칼럼을 곱해서 GDP를 계산했다.
+하지만, 대륙별로 평균 GDP를 계산하고자 한다면 어떨까?
 
-We could run `calcGDP` and then take the mean of each continent:
+`calcGDP`를 실행하고 나서, 각 대륙별로 평균을 산출한다:
 
 ```{r}
 withGDP <- calcGDP(gapminder)
@@ -54,73 +54,73 @@ mean(withGDP[withGDP$continent == "Americas", "gdp"])
 mean(withGDP[withGDP$continent == "Asia", "gdp"])
 ```
 
-But this isn't very *nice*. Yes, by using a function, you have reduced a
-substantial amount of repetition. That **is** nice. But there is still
-repetition. Repeating yourself will cost you time, both now and later, and
-potentially introduce some nasty bugs.
+하지만, 그다지 *멋있지는* 않다.
+그렇다. 함수를 사용해서, 반복되는 상당량 작업을 줄일 수 있었다.
+함수 사용은 **멋있었다**. 하지만, 여전히 반복이 있다.
+여러분이 직접 반복하게 되면, 일단 여러분 시간을 지금은 물론이고 그리고 나중에도 까먹게 되고,
+잠재적으로 버그가 스며들 여지를 남기게 된다.
 
-We could write a new function that is flexible like `calcGDP`, but this
-also takes a substantial amount of effort and testing to get right.
+`calcGDP`처럼 유연성 있는 함수를 새로 작성할 수도 있지만,
+제대로 동작하는 함수를 개발하기까지 상당량 노력과 테스트가 필요하다.
 
-The abstract problem we're encountering here is know as "split-apply-combine":
+여기서 맞닥드린 추상화 문제를 "분할-적용-병합(split-apply-combine)" 전략이라고 부른다:
 
 ![Split apply combine](../fig/12-plyr-fig1.png)
 
-We want to *split* our data into groups, in this case continents, *apply*
-some calculations on that group, then optionally *combine* the results
-together afterwards.
+데이터를 집단으로 *분할(split)*하고, 이번 경우에 대륙,
+해당 집단에 연산작업을 *적용(apply)*하고 나서, 
+선택옵션으로 결과를 묶어 *병합(combine)*한다.
 
-## The `plyr` package
+## `plyr` 팩키지
 
-For those of you who have used R before, you might be familiar with the
-`apply` family of functions. While R's built in functions do work, we're
-going to introduce you to another method for solving the "split-apply-combine"
-problem. The [plyr](http://had.co.nz/plyr/) package provides a set of
-functions that we find more user friendly for solving this problem.
+R을 예전에 사용했다면, `apply` 함수 가족에 친숙할 수 있다.
+R 내장함수도 동작이 잘 되지만, "분할-적용-병합" 문제를 해결하는데 사용되는 또다른 방법을 소개한다.
+[plyr](http://had.co.nz/plyr/) 팩키지는 이런 유형의 문제를 해결하는데 훨씬 사용자 친화적인 
+함수를 집합으로 제공한다.
 
-We installed this package in an earlier challenge. Let's load it now:
+이전 도전과제에서 `plyr` 팩키지를 설치했다. 이제 `plyr` 불러와서 적재한다:
 
 ```{r}
 library("plyr")
 ```
 
-Plyr has functions for operating on `lists`, `data.frames` and `arrays`
-(matrices, or n-dimensional vectors). Each function performs:
+`plyr` 팩키지에는 리스트(`lists`), 데이터프레임(`data.frames`), 배열(`arrays`, 행렬, n-차원 벡터) 
+자료형 연산을 위한 함수가 있다. 함수 각각은 다음 작업을 수행한다:
 
-1. A **split**ting operation
-2. **Apply** a function on each split in turn.
-3. Re**combine** output data as a single data object.
+1. **분할(split)**하는 연산
+2. 순서대로 각각 쪼갠 것에 함수를 **적용(apply)**한다.
+3. 데이터 객체로 출력 데이터로 다시 **병합(combine)**한다.
 
-The functions are named based on the data structure they expect as input,
-and the data structure you want returned as output: [a]rray, [l]ist, or
-[d]ata.frame. The first letter corresponds to the input data structure,
-the second letter to the output data structure, and then the rest of the
-function is named "ply".
+입력값으로 예상되는 자료구조와 출력값으로 반환되는 자료구조에 기반해서 함수명이 붙여졌다:
+[a]rray, [l]ist, [d]ata.frame.
+첫번째 문자가 입력 자료구조, 두번째 문자가 출력 자료구조에 대응되고,
+함수 나머지에 "ply"를 붙인다.
 
-This gives us 9 core functions **ply.  There are an additional three functions
-which will only perform the split and apply steps, and not any combine step.
-They're named by their input data type and represent null output by a `_` (see
-table)
+[a]rray, [l]ist, [d]ata.frame 를 입력과 출력에 조합하면 핵심 **ply 함수 9개가 산출된다.
+분할과 적용 단계만 수행하고 병합단계를 거치지 않는 함수가 추가로 3개 있다.
+입력 데이터 자료형에 NULL 출력값(`_`)으로 표현된다. (아래 테이블 참조)
 
-Note here that plyr's use of "array" is different to R's,
-an array in ply can include a vector or matrix.
+여기서 "배열"에 대한 `plyr`이 다른 것과 다름에 주목한다.
+ply에 사용되는 배열은 벡터 혹은 행렬을 포함할 수 있다.
+
 
 ![Full apply suite](../fig/12-plyr-fig2.png)
 
 
-Each of the xxply functions (`daply`, `ddply`, `llply`, `laply`, ...) has the
-same structure and has 4 key features and structure:
+xxply 함수(`daply`, `ddply`, `llply`, `laply`, ...) 각각은 동일한 구조를 갖고,
+4가지 주요 기능을 갖는다:
+
 
 ```{r, eval=FALSE}
 xxply(.data, .variables, .fun)
 ```
 
-* The first letter of the function name gives the input type and the second gives the output type.
-* .data - gives the data object to be processed
-* .variables - identifies the splitting variables
-* .fun - gives the function to be called on each piece
+* 함수명 첫글자는 입력 자료형, 함수 두번째 글자는 출력 자료형을 나타낸다.
+* .data - 처리될 자료객체를 나타낸다.
+* .variables - 분할(split)변수를 식별한다.
+* .fun - 각 그룹 집단에 연산작업을 위해 호출되는 함수.
 
-Now we can quickly calculate the mean GDP per continent:
+이제, 대륙별로 평균 GDP를 신속하게 계산할 수 있다:
 
 ``` {r}
 ddply(
@@ -130,29 +130,32 @@ ddply(
 )
 ```
 
-Let's walk through the previous code:
+방금전 코드에서 일어난 사건을 복기해 보자:
 
-- The `ddply` function feeds in a `data.frame` (function starts with **d**) and
-returns another `data.frame` (2nd letter is a **d**) i
-- the first argument we gave was the data.frame we wanted to operate on: in this
-  case the gapminder data. We called `calcGDP` on it first so that it would have
-  the additional `gdp` column added to it.
-- The second argument indicated our split criteria: in this case the "continent"
-  column. Note that we gave the name of the column, not the values of the column like we had done previously with subsetting. Plyr takes care of these
-  implementation details for you.
-- The third argument is the function we want to apply to each grouping of the
-  data. We had to define our own short function here: each subset of the data
-  gets stored in `x`, the first argument of our function. This is an anonymous
-  function: we haven't defined it elsewhere, and it has no name. It only exists
-  in the scope of our call to `ddply`.
+- `ddply` 함수에 `data.frame` 데이터프레임을 집어넣고(함수명이 **d**로 시작), 
+  또다른 `data.frame` 데이터프레임을 반환한다(함수명 두번째 문자 **d**).
+- 전달한 첫번째 인자는 연산작업을 실행하고자 하는 데이터프레임이다: 이번 경우에 gapminder 데이터.
+   먼저 `calcGDP` 함수를 호출해서, gapminder 데이터프레임에 `gdp` 칼럼을 추가한다.
+- 두번째 인자가 분할 조건을 명시한다: 이번 경우에, "대륙(continent)"  칼럼이다.
+   부분집합(subsetting) 연산으로 이전에 수행했던 것처럼, 실제 칼럼 자체가 아니라,
+   칼럼명만 부여했음에 주목한다. `plyr` 팩키지에 자세한 구현이 되어 있어, 칼럼명만 전달하면 된다.
+- 세번째 인자는 그룹 집단 각각에 적용하고자 하는 함수다.
+   이번 경우에는, 짧은 함수를 자체 정의했다:
+   데이터 각 부분집합은 함수 첫번째 인자, `x`에 저장되어 있다. 
+   이것을 람다 함수라고 부른다: 어디서도 정의하지 않았기 때문에, 이름이 없는 무명함수다.
+   `ddply` 함수가 호출되는 범위(scope)에만 존재한다.
 
-> ## Challenge 1
+출력 자료구조를 달리하면 어떨까?
+
+
+> ## 도전과제 1
 >
-> Calculate the average life expectancy per continent. Which has the longest?
-> Which had the shortest?
+> 대륙별로 평균 기대수명을 계산하라.
+> 어느 대륙이 가장 기대수명이 긴가?
+> 어느 대륙이 가장 기대수명이 짧은가?
 {: .challenge}
 
-What if we want a different type of output data structure?:
+출력 자료구조를 달리하면 어떨까?
 
 ```{r}
 dlply(
@@ -162,10 +165,10 @@ dlply(
 )
 ```
 
-We called the same function again, but changed the second letter to an `l`, so
-the output was returned as a list.
+동일한 함수를 호출했지만, 두번째 문자만 `l`로 변경했다.
+그래서, 출력결과가 리스트로 반환됐다.
 
-We can specify multiple columns to group by:
+다수 칼럼을 지정해서 그룹별로 *group by* 할 수 있다:
 
 ``` {r}
 ddply(
@@ -183,9 +186,9 @@ daply(
 )
 ```
 
-You can use these functions in place of `for` loops (and its usually faster to
-do so).
-To replace a for loop, put the code that was in the body of the `for` loop inside an anonymous function.
+`for` 루프 자리에 람다 함수를 사용할 수 있다(대체로 더 빠르다):
+`for` 루프 몸통부분을 람다 함수에 작성하면 된다:
+
 
 ```{r}
 d_ply(
@@ -201,32 +204,29 @@ d_ply(
 )
 ```
 
-> ## Tip: printing numbers
+> ## Tip: 숫자 출력하기
 >
-> The `format` function can be used to make numeric
-> values "pretty" for printing out in messages.
+> `format` 함수를 사용해서 메시지와 함께 숫자값을 "예쁘게" 출력할 수도 있다.
 {: .callout}
 
 
-> ## Challenge 2
+> ## 도전과제 2
 >
-> Calculate the average life expectancy per continent and year. Which had the
-> longest and shortest in 2007? Which had the greatest change in between 1952
-> and 2007?
+> 대륙과 연도별로 평균 기대수명을 계산하시오.
+> 2007년에 어느 것이 가장 짧고, 가장 긴가?
+> 1952년과 2007년 사이에 가장 커다란 변화는 어느 것인가?
 {: .challenge}
 
 
-> ## Advanced Challenge
+> ## 고급 도전과제
 >
-> Calculate the difference in mean life expectancy between
-> the years 1952 and 2007 from the output of challenge 2
-> using one of the `plyr` functions.
+> `plyr` 함수 중 하나를 사용해서 도전과제 2에서 나온 출력결과로부터,
+> 1952년에서 2007년 사이 평균 기대수명 차이를 계산하시오.
 {: .challenge}
 
-> ## Alternate Challenge if class seems lost
+> ## (수업시간에서 정신을 잃어버린 듯 하다면) 대안 도전과제
 >
-> Without running them, which of the following will calculate the average
-> life expectancy per continent:
+> 실제로 실행하지 말고, 다음 중 어떤 코드가 대륙별 평균 기대수명을 계산하는가:
 >
 > 1.
 > ```{r, eval=FALSE}
