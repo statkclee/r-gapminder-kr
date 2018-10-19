@@ -1,5 +1,5 @@
 ---
-title: `tidyr` 팩키지로 데이터프레임 솜씨있게 조작
+title: tidyr 팩키지로 데이터프레임 솜씨있게 조작
 teaching: 30
 exercises: 15
 questions:
