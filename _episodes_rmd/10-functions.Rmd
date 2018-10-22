@@ -181,22 +181,23 @@ kelvin_to_celsius <- function(temp) {
 > {: .solution}
 {: .challenge}
 
-## Interlude: Defensive Programming
+## 막간: 방어적 프로그래밍(Defensive Programming)
 
-Now that we've begun to appreciate how writing functions provides an efficient
-way to make R code re-usable and modular, we should note that it is important
-to ensure that functions only work in their intended use-cases. Checking
-function parameters is related to the concept of _defensive programming_.
-Defensive programming encourages us to frequently check conditions and throw an
-error if something is wrong. These checks are referred to as assertion
-statements because we want to assert some condition is `TRUE` before proceeding.
-They make it easier to debug because they give us a better idea of where the
-errors originate.
+R코드를 재사용가능하고 모듈화 되도록 만드는데 함수 작성이 효율적인 방법을 제공한다는 점에서 이제야 
+참진가를 알게 되었다. 따라서, 함수가 의도된 방식으로 동작하도록 확실히 하는 것도 매우 중요하다.
+함수 매개변수(인자) 검사는 **방어적 프로그래밍(defensive programming)** 개념과 연관되어 있다.
+방어적 프로그래밍은 자주 조건을 검사하고, 무언가 잘못되면 오류를 던지도록 장려한다.
+이러한 검사를 단언문(assertion statement)라고 부른다. 왜냐하면 다음으로 넘어가기 전에 
+조건이 `TRUE` 사실로 단언해야 되기 때문이다.
+이러한 특성이 디버깅을 더 수월하게 하는데 이유는 오류가 최초 생겨난 곳에 대해 더 나은 아이디어를 
+제시해 주기 때문이다.
 
-### Checking conditions with `stopifnot()`
 
-Let's start by re-examining `fahr_to_kelvin()`, our function for converting
-temperatures from Fahrenheit to Kelvin. It was defined like so:
+
+### `stopifnot()` 함수로 조건 검사 
+
+화씨 온도를 켈빈 온도로 변환하는데 사용되는 자체 제작 함수 `fahr_to_kelvin()`을 
+다시 살펴보면서 시작해보자. 함수가 다음과 같이 정의되었다:
 
 ```{r}
 fahr_to_kelvin <- function(temp) {
@@ -205,12 +206,12 @@ fahr_to_kelvin <- function(temp) {
 }
 ```
 
-For this function to work as intended, the argument `temp` must be a `numeric`
-value; otherwise, the mathematical procedure for converting between the two
-temperature scales will not work. To create an error, we can use the function
-`stop()`. For example, since the argument `temp` must be a `numeric` vector, we
-could check for this condition with an `if` statement and throw an error if the
-condition was violated. We could augment our function above like so:
+함수가 의도한 대로 동작하기 위해서, `temp` 인자는 숫자형(`numeric`) 값이 되어야 한다;
+그렇지 않은 경우, 온도를 변환하는 수학 연산 작업이 정상적으로 수행되지 않게 된다.
+오류를 생성시키는데, `stop()` 함수를 사용한다.
+예를 들어, `temp` 인자는 숫자형(`numeric`) 벡터가 되어야 하는데, 
+`if` 문으로 조건을 검사해서 조건이 위반되면 오류를 던진다.
+이를 반영하여 다음과 같이 함수 기능을 강화시킬 수 있다:
 
 ```{r}
 fahr_to_kelvin <- function(temp) {
@@ -222,18 +223,16 @@ fahr_to_kelvin <- function(temp) {
 }
 ```
 
-If we had multiple conditions or arguments to check, it would take many lines
-of code to check all of them. Luckily R provides the convenience function
-`stopifnot()`. We can list as many requirements that should evaluate to `TRUE`;
-`stopifnot()` throws an error if it finds one that is `FALSE`. Listing these
-conditions also serves a secondary purpose as extra documentation for the
-function.
+검사할 다수 조건과 인자가 있게 되면, 이 모두를 검사하는 코드가 많이 필요하게 된다.
+다행히, `stopifnot()` 편의 함수가 R에서 지원된다.
+`TRUE` 참으로 평가되어야 하는 요구사항을 쭉 나열한다; `FALSE` 거짓인 것이 하나 
+발견되면 `stopifnot()` 함수는 오류를 던진다.
+이러한 조건을 나열하는 것이 함수에 대한 부가 문서로서 부차적인 역할을 담당도 한다.
 
-Let's try out defensive programming with `stopifnot()` by adding assertions to
-check the input to our function `fahr_to_kelvin()`.
+`fahr_to_kelvin()` 함수의 입력값을 검사하는 단언문을 추가해서 
+`stopifnot()` 함수로 방어적 프로그래밍을 시도해보자.
 
-We want to assert the following: `temp` is a numeric vector. We may do that like
-so:
+다음을 단언문으로 확인하자; `temp` 인자가 숫자 벡터다. 다음과 같이 코드를 작성하자:
 
 ```{r}
 fahr_to_kelvin <- function(temp) {
@@ -243,34 +242,31 @@ fahr_to_kelvin <- function(temp) {
 }
 ```
 
-It still works when given proper input.
+적절한 입력이 제시되면 정상적으로 동작한다.
 
 ```{r}
-# freezing point of water
+# 빙점
 fahr_to_kelvin(temp = 32)
 ```
 
-But fails instantly if given improper input.
+부적절한 입력이 제시되면 즉시 실패한다.
 
 ```{r}
-# Metric is a factor instead of numeric
+# 숫자형 대신에 문자가 주어짐.
 fahr_to_kelvin(temp = as.factor(32))
 ```
 
-> ## Challenge 3
+> ## 도전과제 3
 >
-> Use defensive programming to ensure that our `fahr_to_celsius()` function
-> throws an error immediately if the argument `temp` is specified
-> inappropriately.
+> 방어적 프로그래밍을 사용해서, `temp` 인자를 부적절하게 제시하게 되면
+> `fahr_to_celsius()` 함수가 오류를 즉시 던지도록 작성한다.
+> 
 >
->
-> > ## Solution to challenge 3
+> > ## 도전과제 3에 대한 해답
 > >
-> > Extend our previous definition of the function by adding in an explicit call
-> > to `stopifnot()`. Since `fahr_to_celsius()` is a composition of two other
-> > functions, checking inside here makes adding checks to the two component
-> > functions redundant.
-> >
+> > `stopifnot()` 함수에 명시적으로 호출을 추가해서 앞서 정의한 함수를 확장시킨다.
+> > `fahr_to_celsius()` 함수는 다른 두 함수를 조합한 것이라서,
+> > 두번째 함수에도 검사를 추가하는 것은 중복이 된다.
 > >
 > > ```{r}
 > > fahr_to_celsius <- function(temp) {
@@ -283,10 +279,7 @@ fahr_to_kelvin(temp = as.factor(32))
 > {: .solution}
 {: .challenge}
 
-## More on combining functions
-
-Now, we're going to define a function that calculates the Gross Domestic Product
-of a nation from the data available in our dataset:
+## 좀더 함수조합을 살펴보자.
 
 이제 데이터셋에서 한 국가에 대한 국내총생산(GDP)를 계산하는 함수를 작성한다:
 
