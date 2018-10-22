@@ -558,20 +558,17 @@ numeric_coerced_to_logical
 ~~~
 {: .output}
 
+R이 기본 자료형을 다른 자료형으로 강제 변환할 때, 놀라운 일이 생겨난다!
+자료형 강제변환에 대한 핵심사항은 차치하고 중요한 점은 다음과 같다:
+본인 데이터가 생각한 바와 다르게 보인다면, 자료형 강제변환이 원인으로 지목되는 것이 당연하다;
+벡터와 데이터프레임의 칼럼 자료형이 동일하도록 확실히 하라. 
+그렇지 않으면 끔찍한 놀라운 경험을 하게 될 것이다!
 
-
-As you can see, some surprising things can happen when R forces one basic data
-type into another! Nitty-gritty of type coercion aside, the point is: if your
-data doesn't look like what you thought it was going to look like, type coercion
-may well be to blame; make sure everything is the same type in your vectors and
-your columns of data.frames, or you will get nasty surprises!
-
-But coercion can also be very useful! For example, in our `cats` data
-`likes_string` is numeric, but we know that the 1s and 0s actually represent
-`TRUE` and `FALSE` (a common way of representing them). We should use the
-`logical` datatype here, which has two states: `TRUE` or `FALSE`, which is
-exactly what our data represents. We can 'coerce' this column to be `logical` by
-using the `as.logical` function:
+하지만, 경우에 따라서는 자료형 강제변환이 매우 유용할 수도 있다!
+예를 들어, `cats` 데이터프레임 `likes_string` 칼럼은 숫자형이지만,
+`1`과, `0`이 실제로 `TRUE`와 `FALSE`를 표현한다는 것을 알고 있다.
+이 경우 두 상태(`TRUE` 혹은 `FALSE`)를 갖는 논리형 자료형을 사용해야 한다.
+`as.logical` 함수를 사용해서 칼럼을 `논리형(logical)`으로 '강제변환(coerce)' 시킨다:
 
 
 ~~~
@@ -600,8 +597,7 @@ cats$likes_string
 [1]  TRUE FALSE  TRUE
 ~~~
 {: .output}
-
-The combine function, `c()`, will also append things to an existing vector:
+결합 함수(`c()`)는 기존 벡터에 무언가 추가하는 역할을 수행한다:
 
 
 ~~~
@@ -632,7 +628,7 @@ combine_example
 ~~~
 {: .output}
 
-You can also make series of numbers:
+숫자 순열도 생성할 수 있다:
 
 
 ~~~
@@ -682,7 +678,7 @@ seq(1,10, by=0.1)
 ~~~
 {: .output}
 
-We can ask a few questions about vectors:
+벡터에 관해 궁금한 점도 물어볼 수 있다:
 
 
 ~~~
@@ -754,7 +750,7 @@ typeof(sequence_example)
 ~~~
 {: .output}
 
-Finally, you can give names to elements in your vector:
+마지막으로, 벡터의 각 원소에 명칭을 부여하는 것도 가능하다:
 
 
 ~~~
@@ -786,13 +782,13 @@ names(my_example)
 ~~~
 {: .output}
 
-> ## Challenge 1
+> ## 도전과제 1
 >
-> Start by making a vector with the numbers 1 through 26.
-> Multiply the vector by 2, and give the resulting vector
-> names A through Z (hint: there is a built in vector called `LETTERS`)
->
-> > ## Solution to Challenge 1
+> 1 부터 26까지 숫자를 갖는 벡터를 생성하면서 시작해 보자.
+> 생성한 벡터에 2를 곱해서 다시 자신에게 할당한다.
+> 벡터에 A 부터 Z까지 이름을 부여한다.
+> (힌트: `LETTERS`라는 내장벡터가 있다.)
+> > ## 도전과제 1에 대한 해답
 > >
 > > 
 > > ~~~
@@ -805,9 +801,9 @@ names(my_example)
 {: .challenge}
 
 
-## Data Frames
+## 데이터프레임(Data Frames)
 
-We said that columns in data.frames were vectors:
+데이터프레임의 칼럼이 벡터라고 앞에서 언급했다:
 
 
 ~~~
@@ -836,7 +832,7 @@ str(cats$likes_string)
 ~~~
 {: .output}
 
-These make sense. But what about
+말이 된다. 다음은 어떤가?
 
 
 ~~~
@@ -851,12 +847,12 @@ str(cats$coat)
 ~~~
 {: .output}
 
-## Factors
+## 요인(Factors)
 
-Another important data structure is called a *factor*. Factors usually look like
-character data, but are typically used to represent categorical information. For
-example, let's make a vector of strings labelling cat colorations for all the
-cats in our study:
+또다른 중요한 자료구조가 **요인(factor)**이다.
+요인은 보통 문자 데이터처럼 생겼다. 
+하지만, 일반적으로 범주형 정보를 나타내는데 사용된다.
+예를 들어, 연구중인 모든 고양이에 대한 색상을 문자열 벡터로 만들어보자:
 
 
 ~~~
@@ -887,7 +883,7 @@ str(coats)
 ~~~
 {: .output}
 
-We can turn a vector into a factor like so:
+문자열 벡터를 요인형으로 바꾸면 다음과 같다:
 
 
 ~~~
@@ -917,11 +913,13 @@ str(CATegories)
 ~~~
 {: .output}
 
-Now R has noticed that there are three possible categories in our data - but it
-also did something surprising; instead of printing out the strings we gave it,
-we got a bunch of numbers instead. R has replaced our human-readable categories
-with numbered indices under the hood, this is necessary as many statistical
-calculations utilise such numerical representations for categorical data:
+이제 R은 데이터에 3가지 가능한 범주가 있음을 파악하게 되었다 - 
+하지만, 놀라운 것도 함께 수행했다; 문자열을 출력하는 대신에,
+숫자가 대량으로 출도되었다. 
+R은 내부적으로 사람이 읽을 수 있는 범주를 숫자 인덱스로 치환시킨다.
+이런 기능은 대다수 통계 계산에서 범주형 데이터를 숫자형으로 표현되는 기능을 활용하기 때문에
+꼭 필요하다.
+
 
 
 ~~~
@@ -950,16 +948,17 @@ typeof(CATegories)
 ~~~
 {: .output}
 
-> ## Challenge 2
+> ## 도전과제 2
 >
-> Is there a factor in our `cats` data.frame? what is its name?
-> Try using `?read.csv` to figure out how to keep text columns as character
-> vectors instead of factors; then write a command or two to show that the factor
-> in `cats` is actually a character vector when loaded in this way.
+> 
+> `cats` 데이터프레임에 요인형 칼럼이 있나요? 요인형 칼럼의 이름은 무엇인가요?
+> `?read.csv` 명령어를 사용해서 텍스트 칼럼을 요인형 대신에 문자형으로 그대로 유지시키는
+> 방법을 찾아내세요; 그리고 나서 `cat` 데이터프레임의 요인이 실제로 문자벡터임을 
+> 확인하는 명령문을 작성하시오.
 >
-> > ## Solution to Challenge 2
+> > ## 도전과제 2에 대한 해답
 > >
-> > One solution is use the argument `stringAsFactors`:
+> > 해법으로 `stringAsFactors` 인자를 사용하면 된다.:
 > >
 > > 
 > > ~~~
@@ -968,8 +967,7 @@ typeof(CATegories)
 > > ~~~
 > > {: .language-r}
 > >
-> > Another solution is use the argument `colClasses`
-> > that allow finer control.
+> > 또다른 해법은 `colClasses` 인자를 사용해서 칼럼을 좀더 면밀히 제어하는 것이다.
 > >
 > > 
 > > ~~~
@@ -978,15 +976,15 @@ typeof(CATegories)
 > > ~~~
 > > {: .language-r}
 > >
-> > Note: new students find the help files difficult to understand; make sure to let them know
-> > that this is typical, and encourage them to take their best guess based on semantic meaning,
-> > even if they aren't sure.
+> > 주의: 도움말 파일이 이해하기 어렵다는 학생이 다수 있다; 
+> > 도움말 파일을 이해하기 어렵다는 것이 일반적이라서,
+> > 확신하지는 못하더라도, 문맥에 기초하여 최대한 추측하도록 용기를 주도록 한다.
 > {: .solution}
 {: .challenge}
 
-In modelling functions, it's important to know what the baseline levels are. This
-is assumed to be the first factor, but by default factors are labelled in
-alphabetical order. You can change this by specifying the levels:
+모형 함수에서 기준 수준(baseline level)이 무엇인지 파악하는 것이 중요하다.
+요인의 첫번째 범주로 가정하지만, 기본디폴트는 알파벳순으로 정해지게 되어 있다.
+수준을 다음과 같이 지정해서 변경할 수 있다:
 
 
 ~~~
@@ -1003,15 +1001,14 @@ str(factor_ordering_example)
 ~~~
 {: .output}
 
-In this case, we've explicitly told R that "control" should represented by 1, and
-"case" by 2. This designation can be very important for interpreting the
-results of statistical models!
+상기 경우 "control"를 1로, "case"를 2로 명시적으로 지정하도록 했다.
+이러한 지정이 통계 모형 결과를 해석하는데 있어 매우 중요하다.
 
-## Lists
+## 리스트 (Lists)
 
-Another data structure you'll want in your bag of tricks is the `list`. A list
-is simpler in some ways than the other types, because you can put anything you
-want in it:
+데이터 과학자로서 알고 있어야 되는 또다른 자료구조가 `리스트(list)`다.
+리스트는 다른 자료형과 비교하여 몇가지 점에서 더 단순하다.
+왜냐하면 원하는 무엇이든 넣을 수 있기 때문이다:
 
 
 ~~~
@@ -1059,7 +1056,7 @@ $data
 ~~~
 {: .output}
 
-We can now understand something a bit surprising in our data.frame; what happens if we run:
+데이터프레임에서 다소 놀라운 것을 이제 이해할 수 있다; 다음을 실행하게 되면 무슨 일이 발생될가:
 
 
 ~~~
@@ -1074,15 +1071,15 @@ typeof(cats)
 ~~~
 {: .output}
 
-We see that data.frames look like lists 'under the hood' - this is because a
-data.frame is really a list of vectors and factors, as they have to be - in
-order to hold those columns that are a mix of vectors and factors, the
-data.frame needs something a bit more flexible than a vector to put all the
-columns together into a familiar table.  In other words, a `data.frame` is a
-special list in which all the vectors must have the same length.
+데이터프레임은 '내부적으로(under the hood)' 리스트라는 것을 알 수 있다 - 
+이유는 데이터프레임이 실제로 벡터와 요인으로 구성된 리스트이기 때문이다. 
+벡터와 요인으로 뒤섞인 칼럼을 붙잡아 두려면, 데이터프레임은 
+모든 칼럼을 유사한 표에 담을 수 있는 벡터보다 더 유연할 필요가 있다.
+다른 말로, `data.frame`은 모든 벡터가 동일한 길이를 갖는 특별한 리스트로 
+정의할 수 있다.
 
-In our `cats` example, we have an integer, a double and a logical variable. As
-we have seen already, each column of data.frame is a vector.
+`cats` 사례에서는 정수형, 숫자형, 논리형 변수로 구성된다.
+이미 살펴봤듯이, 데이터프레임 각 칼럼은 벡터다.
 
 
 ~~~
@@ -1141,8 +1138,9 @@ str(cats[,1])
 ~~~
 {: .output}
 
-Each row is an *observation* of different variables, itself a data.frame, and
-thus can be composed of elements of different types.
+각 행은 다른 변수의 *관측점(observation)*으로 그 자체로 데이터프레임이다.
+따라서, 서로 다른 자료형을 갖는 원소로 구성되어진다.
+
 
 
 ~~~
@@ -1189,10 +1187,9 @@ str(cats[1,])
 ~~~
 {: .output}
 
-> ## Challenge 3
+> ## 도전과제 3
 >
-> There are several subtly different ways to call variables, observations and
-> elements from data.frames:
+> 데이터프레임에서 변수와 관측점과 원소를 호출하는 미모하지만 다른 방식이 존재한다:
 >
 > - `cats[1]`
 > - `cats[[1]]`
@@ -1202,11 +1199,11 @@ str(cats[1,])
 > - `cats[, 1]`
 > - `cats[1, ]`
 >
-> Try out these examples and explain what is returned by each one.
+> 상기 예제를 시도해보고, 각각이 반환하는 것을 설명해 본다.
 >
-> *Hint:* Use the function `typeof()` to examine what is returned in each case.
+> *힌트:* `typeof()` 함수를 사용해서 각각의 경우에 반환되는 것을 꼼꼼히 살펴본다.
 >
-> > ## Solution to Challenge 3
+> > ## 도전과제 3에 대한 해답
 > > 
 > > ~~~
 > > cats[1]
@@ -1222,9 +1219,9 @@ str(cats[1,])
 > > 3  tabby
 > > ~~~
 > > {: .output}
-> > We can think of a data frame as a list of vectors. The single brace `[1]`
-> returns the first slice of the list, as another list. In this case it is the
-> first column of the data frame.
+> > 데이터프레임을 벡터로 구성된 리스트로 간주할 수 있다.
+> > 단일 꺾쇠 `[1]`은 리스트의 첫번째 원소를 리스트로 반환한다.
+> > 이번 경우, 데이터프레임의 첫번째 칼럼이 된다.
 > > 
 > > ~~~
 > > cats[[1]]
@@ -1240,6 +1237,8 @@ str(cats[1,])
 > > {: .output}
 > > The double brace `[[1]]` returns the contents of the list item. In this case
 > it is the contents of the first column, a _vector_ of type _factor_.
+> > 이중 꺾쇠  `[[1]]`은 리스트의 원소 내용물을 반환한다.
+> > 이번 경우, 리스트가 아닌 *요인형* 벡터로 첫번째 칼럼 내용물을 반환한다.
 > > 
 > > ~~~
 > > cats$coat
@@ -1253,8 +1252,8 @@ str(cats[1,])
 > > Levels: black calico tabby
 > > ~~~
 > > {: .output}
-> > This example uses the `$` character to address items by name. _coat_ is the
-> first column of the data frame, again a _vector_ of type _factor_.
+> > 명칭으로 항목을 끄집어내는데 `$` 기호를 사용한다.
+> > _coat_가 데이터프레임의 첫번째 칼럼으로 *요인형* 벡터가 반환된다.
 > > 
 > > ~~~
 > > cats["coat"]
@@ -1270,8 +1269,8 @@ str(cats[1,])
 > > 3  tabby
 > > ~~~
 > > {: .output}
-> > Here we are using a single brace `["coat"]` replacing the index number with
-> the column name. Like example 1, the returned object is a _list_.
+> > `["coat"]` 방식은 칼럼 인덱스를 명칭으로 바꾸고 동시에 꺾쇠를 사용한 경우다.
+> > 예제 1과 마찬가지로 반환되는 객체는 리스트가 된다.
 > > 
 > > ~~~
 > > cats[1, 1]
@@ -1285,10 +1284,10 @@ str(cats[1,])
 > > Levels: black calico tabby
 > > ~~~
 > > {: .output}
-> > This example uses a single brace, but this time we provide row and column
-> coordinates. The returned object is the value in row 1, column 1. The object
-> is an _integer_ but because it is part of a _vector_ of type _factor_, R
-> displays the label "calico" associated with the integer value.
+> > 단일 꺾쇠를 사용했는데 이번에는 행과 열의 좌표도 넣어 전달했다.
+> > 반환되는 객체는 첫번째 행, 첫번째 열에 교차하는 값이 된다.
+> > 반환되는 객체는 정수형이지만, 요인형 벡터의 일부분이라 정수값과 연관된 
+> > 라벨 "calico"도 함께 출력한다.
 > > 
 > > ~~~
 > > cats[, 1]
@@ -1302,9 +1301,8 @@ str(cats[1,])
 > > Levels: black calico tabby
 > > ~~~
 > > {: .output}
-> > Like the previous example we use single braces and provide row and column
-> coordinates. The row coordinate is not specified, R interprets this missing
-> value as all the elements in this _column_ _vector_.
+> > 앞선 예제와 마찬가지로 꺾쇠를 하나만 사용했고, 행과 열 좌표도 전달했다.
+> > 행좌표를 지정하지 않은 경우, R에서 결측값은 해당 칼럼 벡터의 모든 원소로 해석된다.
 > > 
 > > ~~~
 > > cats[1, ]
@@ -1318,15 +1316,14 @@ str(cats[1,])
 > > 1 calico    2.1         TRUE
 > > ~~~
 > > {: .output}
-> > Again we use the single brace with row and column coordinates. The column
-> coordinate is not specified. The return value is a _list_ containing all the
-> values in the first row.
+> > 다시 한번, 꺽쇠를 하나만 사용했고, 행과 열 좌표도 전달했다.
+> > 칼럼 좌표가 지정되어 있지 않기 때문에, 첫번째 행의 모든 값을 포함하는 리스트가 반환된다.
 > {: .solution}
 {: .challenge}
 
-## Matrices
+## 행렬 (Matrices)
 
-Last but not least is the matrix. We can declare a matrix full of zeros:
+마지막으로 중요한 자료형이 행렬이다. 0으로 가득찬 행렬을 다음과 같이 선언한다:
 
 
 ~~~
@@ -1345,7 +1342,7 @@ matrix_example
 ~~~
 {: .output}
 
-And similar to other data structures, we can ask things about our matrix:
+다른 자료구조와 마찬가지로, 행렬에 질문을 다음과 같이 던질 수 있다:
 
 
 ~~~
@@ -1430,17 +1427,15 @@ ncol(matrix_example)
 ~~~
 {: .output}
 
-> ## Challenge 4
+> ## 도전과제 4
 >
-> What do you think will be the result of
-> `length(matrix_example)`?
-> Try it.
-> Were you right? Why / why not?
+> `length(matrix_example)` 실행결과는 어떻게 나올까?
+> 시도해보자.
+> 생각한 것과 일치하는가? 왜 그런가/ 왜 그렇지 않는가?
 >
-> > ## Solution to Challenge 4
+> > ## 도전과제 4에 대한 해답
 > >
-> > What do you think will be the result of
-> > `length(matrix_example)`?
+> > `length(matrix_example)` 실행결과는 어떻게 나올까?
 > >
 > > 
 > > ~~~
@@ -1456,29 +1451,27 @@ ncol(matrix_example)
 > > ~~~
 > > {: .output}
 > >
-> > Because a matrix is a vector with added dimension attributes, `length`
-> > gives you the total number of elements in the matrix.
+> > 행렬은 차원 속성이 추가된 벡터라서, 
+> > `length()` 함수는 행렬의 전체 원소 갯수를 반환시킨다. 
 > {: .solution}
 {: .challenge}
 
 
-> ## Challenge 5
+> ## 도전과제 5
 >
-> Make another matrix, this time containing the numbers 1:50,
-> with 5 columns and 10 rows.
-> Did the `matrix` function fill your matrix by column, or by
-> row, as its default behaviour?
-> See if you can figure out how to change this.
-> (hint: read the documentation for `matrix`!)
+> 또다른 행렬을 만들어 보자.
+> 이번에는 1:50 숫자를 담고 있는 칼럼이 5, 행이 10일 행렬이다.
+> `matrix()` 함수로 칼럼기준으로 혹은 행기준으로 채울 수 있나요?
+> 행과 열을 바꿔 변경할 수 있는 방법을 찾아보자.
+> (힌트: `matrix` 도움말 문서를 참조한다!)
 >
-> > ## Solution to Challenge 5
+> > ## 도전과제 5에 대한 해답
 > >
-> > Make another matrix, this time containing the numbers 1:50,
-> > with 5 columns and 10 rows.
-> > Did the `matrix` function fill your matrix by column, or by
-> > row, as its default behaviour?
-> > See if you can figure out how to change this.
-> > (hint: read the documentation for `matrix`!)
+> > 또다른 행렬을 만들어 보자.
+> > 이번에는 1:50 숫자를 담고 있는 칼럼이 5, 행이 10일 행렬이다.
+> > `matrix()` 함수로 칼럼기준으로 혹은 행기준으로 채울 수 있나요?
+> > 행과 열을 바꿔 변경할 수 있는 방법을 찾아보자.
+> > (힌트: `matrix` 도움말 문서를 참조한다!)
 > >
 > > 
 > > ~~~
@@ -1490,16 +1483,16 @@ ncol(matrix_example)
 {: .challenge}
 
 
-> ## Challenge 6
->  Create a list of length two containing a character vector for each of the sections in this part of the workshop:
+> ## 도전과제 6
+> 이번 워크샵에서 다룬 각 섹션별 문자벡터를 포함하는 길이 2을 갖는 리스트를 생성하시오.
 >
->  - Data types
->  - Data structures
+>  - 자료형(Data types)
+>  - 자료구조(Data structures)
 >
->  Populate each character vector with the names of the data types and data
->  structures we've seen so far.
+> 지금까지 살펴본 자료형(data type)과 자료구조(data structure)를 명칭으로 갖는 
+> 문자 벡터를 채워넣는다. 
 >
-> > ## Solution to Challenge 6
+> > ## 도전과제 6에 대한 해답
 > > 
 > > ~~~
 > > dataTypes <- c('double', 'complex', 'integer', 'character', 'logical')
@@ -1507,17 +1500,16 @@ ncol(matrix_example)
 > > answer <- list(dataTypes, dataStructures)
 > > ~~~
 > > {: .language-r}
-> > Note: it's nice to make a list in big writing on the board or taped to the wall
-> > listing all of these types and structures - leave it up for the rest of the workshop
-> > to remind people of the importance of these basics.
+> > 주목: 칠판이나 벽에 자료형과 자료구조를 모두 적어두는 것이 도움이 될 수 있다 -
+> > 워크샵 동안 참여자들에게 기본 자료형과 구조의 중요성을 상기할 수 있기 때문이다.
 > >
 > {: .solution}
 {: .challenge}
 
 
-> ## Challenge 7
+> ## 도전과제 7
 >
-> Consider the R output of the matrix below:
+> 아래 행렬의 출력 결과를 생각해보자:
 > 
 > ~~~
 >      [,1] [,2]
@@ -1526,9 +1518,9 @@ ncol(matrix_example)
 > [3,]   10    7
 > ~~~
 > {: .output}
-> What was the correct command used to write this matrix? Examine
-> each command and try to figure out the correct one before typing them.
-> Think about what matrices the other commands will produce.
+> 이 행렬을 작성하는 올바른 명령어는 다음 중 무엇일까?
+> 직접 타이핑하기 전에 각 명령어를 살펴보고, 정답을 생각해보자.
+> 다른 명령어는 어던 행렬을 만들어낼지도 생각해본다.
 >
 > 1. `matrix(c(4, 1, 9, 5, 10, 7), nrow = 3)`
 > 2. `matrix(c(4, 9, 10, 1, 5, 7), ncol = 2, byrow = TRUE)`
@@ -1537,7 +1529,7 @@ ncol(matrix_example)
 >
 > > ## Solution to Challenge 7
 > >
-> > Consider the R output of the matrix below:
+> > 아래 행렬의 출력 결과를 생각해보자:
 > > 
 > > ~~~
 > >      [,1] [,2]
@@ -1546,9 +1538,9 @@ ncol(matrix_example)
 > > [3,]   10    7
 > > ~~~
 > > {: .output}
-> > What was the correct command used to write this matrix? Examine
-> > each command and try to figure out the correct one before typing them.
-> > Think about what matrices the other commands will produce.
+> > 이 행렬을 작성하는 올바른 명령어는 다음 중 무엇일까?
+> > 직접 타이핑하기 전에 각 명령어를 살펴보고, 정답을 생각해보자.
+> > 다른 명령어는 어던 행렬을 만들어낼지도 생각해본다.
 > > 
 > > ~~~
 > > matrix(c(4, 1, 9, 5, 10, 7), ncol = 2, byrow = TRUE)

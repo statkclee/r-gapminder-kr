@@ -334,10 +334,6 @@ names(my_example)
 
 > ## 도전과제 1
 >
-> Start by making a vector with the numbers 1 through 26.
-> Multiply the vector by 2, and give the resulting vector
-> names A through Z (hint: there is a built in vector called `LETTERS`)
->
 > 1 부터 26까지 숫자를 갖는 벡터를 생성하면서 시작해 보자.
 > 생성한 벡터에 2를 곱해서 다시 자신에게 할당한다.
 > 벡터에 A 부터 Z까지 이름을 부여한다.
@@ -389,12 +385,6 @@ class(CATegories)
 str(CATegories)
 ```
 
-Now R has noticed that there are three possible categories in our data - but it
-also did something surprising; instead of printing out the strings we gave it,
-we got a bunch of numbers instead. R has replaced our human-readable categories
-with numbered indices under the hood, this is necessary as many statistical
-calculations utilise such numerical representations for categorical data:
-
 이제 R은 데이터에 3가지 가능한 범주가 있음을 파악하게 되었다 - 
 하지만, 놀라운 것도 함께 수행했다; 문자열을 출력하는 대신에,
 숫자가 대량으로 출도되었다. 
@@ -410,10 +400,6 @@ typeof(CATegories)
 
 > ## 도전과제 2
 >
-> Is there a factor in our `cats` data.frame? what is its name?
-> Try using `?read.csv` to figure out how to keep text columns as character
-> vectors instead of factors; then write a command or two to show that the factor
-> in `cats` is actually a character vector when loaded in this way.
 > 
 > `cats` 데이터프레임에 요인형 칼럼이 있나요? 요인형 칼럼의 이름은 무엇인가요?
 > `?read.csv` 명령어를 사용해서 텍스트 칼럼을 요인형 대신에 문자형으로 그대로 유지시키는
@@ -548,7 +534,6 @@ str(cats[1,])
 > > 반환되는 객체는 첫번째 행, 첫번째 열에 교차하는 값이 된다.
 > > 반환되는 객체는 정수형이지만, 요인형 벡터의 일부분이라 정수값과 연관된 
 > > 라벨 "calico"도 함께 출력한다.
-
 > > ```{r, eval=TRUE, echo=TRUE}
 > > cats[, 1]
 > > ```
