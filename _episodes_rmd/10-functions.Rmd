@@ -1,21 +1,21 @@
 ---
-title: Functions Explained
+title: 함수 설명
 teaching: 45
 exercises: 15
 questions:
-- "How can I write a new function in R?"
+- "R에서 신규 함수를 어떻게 저작할 수 있을가?"
 objectives:
-- "Define a function that takes arguments."
-- "Return a value from a function."
-- "Check argument conditions with `stopifnot()` in functions."
-- "Test a function."
-- "Set default values for function arguments."
-- "Explain why we should divide programs into small, single-purpose functions."
+- "인자를 받는 함수를 정의한다."
+- "함수에서 값을 반환한다."
+- "함수에 `stopifnot()`를 사용해서 인자를 점검한다."
+- "함수를 테스트한다."
+- "함수 인자에 기본디폴트 값을 설정한다."
+- "프로그램을 작게, 단일-목적을 갖는 함수로 쪼개는 이유를 설명한다."
 keypoints:
-- "Use `function` to define a new function in R."
-- "Use parameters to pass values into functions."
-- "Use `stopifnot()` to flexibly check function arguments in R."
-- "Load functions into programs using `source()`."
+- "`function()`를 사용해서 신규 함수를 R에서 정의한다."
+- "인자를 사용해서 함수로 값을 전달한다."
+- "`stopifnot()` 함수를 사용해서 유연하게 R에서 함수 인자를 검사한다."
+- "`source()` 함수를 사용해서 프로그램에 저장된 함수를 불러온다."
 source: Rmd
 ---
 
@@ -26,35 +26,36 @@ knitr_fig_path("10-")
 gapminder <- read.csv("data/gapminder_data.csv", header=TRUE)
 ```
 
+분석할 데이터셋이 하나라면, 파일을 엑셀같은 스프레드쉬트로 불러와서
+간단한 통계량을 도식화하는 것이 아마도 훨씬 빠를 것이다.
+하지만, `gapminder` 데이터는 주기적으로 갱신되서,
+나중에 새로운 정보를 뽑아와서 분석작업을 다시 실행할 수도 있다.
+또한, 미래 특정 시점에 다양한 곳에서 유사한 데이터를 얻어올 수도 있다.
 
-If we only had one data set to analyze, it would probably be faster to load the
-file into a spreadsheet and use that to plot simple statistics. However, the
-gapminder data is updated periodically, and we may want to pull in that new
-information later and re-run our analysis again. We may also obtain similar data
-from a different source in the future.
+이번 수업에서, 단일 명령어로 여러가지 연산작업을 반복하는
+함수 작성방법을 학습할 것이다.
 
-In this lesson, we'll learn how to write a function so that we can repeat
-several operations with a single command.
 
-> ## What is a function?
+> ## 함수란 무엇인가?
 >
-> Functions gather a sequence of operations into a whole, preserving it for
-> ongoing use. Functions provide:
+> 함수는 연속된 연산작업을 모아 전체를 하나로 만들고, 
+> 향후 사용을 위해 보관된다. 함수는 다음 기능을 제공한다:
 >
-> * a name we can remember and invoke it by
-> * relief from the need to remember the individual operations
-> * a defined set of inputs and expected outputs
-> * rich connections to the larger programming environment
+> * 기억할 수 있고 나중에 호출할 수 있는 명칭
+> * 개별적인 연산을 기억할 필요에서 해방
+> * 사전에 정의된 입력과 예상되는 출력
+> * 더 큰 프로그래밍 환경에 풍부한 연계성
 >
-> As the basic building block of most programming languages, user-defined
-> functions constitute "programming" as much as any single abstraction can. If
-> you have written a function, you are a computer programmer.
+> 프로그래밍 언어 대부분의 기본 구성요소로서,
+> 사용자 정의 함수는 어떠한 단일 추상화 못지 않는 중요한 "프로그래밍"으로 간주된다.
+> 함수를 작성할 수 있다면, 여러분은 컴퓨터 프로그래머다:
 {: .callout}
 
-## Defining a function
+## 함수 정의하기
 
-Let's open a new R script file in the `functions/` directory and call it
-functions-lesson.R.
+새로운 R 스크립트 파일을 `functions/` 디렉토리에 `functions-lesson.R` 
+이름으로 저장하고 편집기에서 연다.
+
 
 ```{r}
 my_sum <- function(a, b) {
@@ -63,8 +64,8 @@ my_sum <- function(a, b) {
 }
 ```
 
-Let's define a function `fahr_to_kelvin()` that converts temperatures from
-Fahrenheit to Kelvin:
+화씨온도에서 캘빈온도로 변환하는 `fahr_to_kelvin()` 함수를 정의한다:
+
 
 ```{r}
 fahr_to_kelvin <- function(temp) {
@@ -73,20 +74,24 @@ fahr_to_kelvin <- function(temp) {
 }
 ```
 
-We define `fahr_to_kelvin()` by assigning it to the output of `function`. The
-list of argument names are contained within parentheses.   Next, the
-[body]({{ page.root }}/reference/#function-body) of the function--the
-statements that are executed when it runs--is contained within curly braces
-(`{}`). The statements in the body are indented by two spaces. This makes the
-code easier to read but does not affect how the code operates.
+`function` 출력을 대입하는 `fahr_to_kelvin()` 함수를 정의한다.
+인자 명칭 리스트는 괄호 안에 담겨진다.
+다음으로 함수 [몸통부문]({{ page.root }}/reference.html#function-body)
+(함수를 실행할 때 실행되는 문장)이 
+괄호(`{}`) 내부에 담겨진다.
+몸통부문 문장은 보통 공백 2 개로 들여쓰기한다.
+들여쓰면, 코드 가독성이 높아지지만, 코드 동작에는 영향을 끼치지 않는다.
 
-It is useful to think of creating functions like writing a cookbook. First you define the "ingredients" that your function needs. In this case, we only need one ingredient to use our function: "temp". After we list our ingredients, we then say what we will do with them, in this case, we are taking our ingredient and applying a set of mathmatical operators to it. 
+함수 생성을 요리책 저작하는 것처럼 생각하면 도움이된다.
+먼저, 함수가 필요로 하는 "식재료(ingredient)"를 정의한다.
+온도 변환기 함수에서, 함수에 사용할 식재료는 하나만 필요하다: "temp". 
+식재료를 쭉 나열한 후에, 식재료로 무엇을 할지 기술한다;
+이번 경우에, 식재료를 받아 일련의 수학 연산작업을 수행한다.
 
-When we call the function, the values we pass to it as arguments are assigned to
-those variables so that we can use them inside the function. Inside the
-function, we use a [return
-statement]({{ page.root }}/reference/#return-statement) to send a result back to
-whoever asked for it.
+함수를 호출할 때, 함수에 전달되는 값이 변수에 대입된다.
+그래서, 함수 내부에서 전달되는 값을 사용할 수 있다.
+함수 내부에서 [반환문(return)]({{ page.root }}/reference.html#return-statement)을
+사용해서 호출한 쪽에 결과를 되돌려준다.
 
 > ## Tip
 >
@@ -94,33 +99,36 @@ whoever asked for it.
 > R automatically returns whichever variable is on the last line of the body
 > of the function. But for clarity, we will explicitly define the
 > return statement.
+> R에만 있는 유일무이한 기능 하나가 반환문 `return`이 반듯이 필요하지 않다는 점이다.
+> R은 자동적으로 함수 몸통부문 마지막 줄에 있는 어떤 변수나 반환시킨다.
+> 하지만 명확성을 위해서, 명시적으로 반환문 `return`을 정의한다.
 {: .callout}
 
 
-Let's try running our function.
-Calling our own function is no different from calling any other function:
+함수를 실행해보자.
+본인이 작성한 사용자 정의 함수 호출은 여타 다른 함수 호출과 차이가 없다:
+
 
 ```{r}
-# freezing point of water
+# 빙점
 fahr_to_kelvin(32)
 ```
 
 ```{r}
-# boiling point of water
+# 끓는 점
 fahr_to_kelvin(212)
 ```
 
-> ## Challenge 1
+> ## 도전과제 1
 >
-> Write a function called `kelvin_to_celsius()` that takes a temperature in
-> Kelvin and returns that temperature in Celsius.
+> `kelvin_to_celsius()` 함수를 작성해서 캘빈온도를 받아 섭씨온도를 반환한다.
 >
-> Hint: To convert from Kelvin to Celsius you subtract 273.15
+> **힌트:** 캘빈온도를 섭씨온도로 전환하려면, 273.15 을 뺀다.
+
 >
-> > ## Solution to challenge 1
+> > ## 도전과제 1에 대한 해답
 > >
-> > Write a function called `kelvin_to_celsius` that takes a temperature in Kelvin
-> > and returns that temperature in Celsius
+> > `kelvin_to_celsius()` 함수를 작성해서 캘빈온도를 받아 섭씨온도를 반환한다.
 > >
 > > ```{r}
 > > kelvin_to_celsius <- function(temp) {
@@ -131,13 +139,12 @@ fahr_to_kelvin(212)
 > {: .solution}
 {: .challenge}
 
-## Combining functions
+## 함수 결합
 
-The real power of functions comes from mixing, matching and combining them
-into ever-larger chunks to get the effect we want.
+함수의 진정한 힘은 원하는 효과를 얻어 내는데 함수를 섞고, 매칭하고, 결합해서 
+더 큰 덩어리로 구현함에 있다.
 
-Let's define two functions that will convert temperature from Fahrenheit to
-Kelvin, and Kelvin to Celsius:
+화씨 온도에서 캘빈 온도로, 갤빈 온도에서 섭씨 온도로 온도를 전환하는 함수 두개를 정의한다:
 
 ```{r}
 fahr_to_kelvin <- function(temp) {
@@ -151,17 +158,17 @@ kelvin_to_celsius <- function(temp) {
 }
 ```
 
-> ## Challenge 2
+> ## 도전과제 2
 >
-> Define the function to convert directly from Fahrenheit to Celsius,
-> by reusing the two functions above (or using your own functions if you
-> prefer).
+> 바로 위에 정의된 함수 두개를 재사용해서 화씨온도에서 바로 섭씨온도로 
+> 변환하는 함수를 정의한다.
+> (혹은, 본인이 원하면 자신이 직접 작성한 함수를 사용한다.)
 >
 >
-> > ## Solution to challenge 2
+> > ## 도전과제 2에 대한 해답
 > >
-> > Define the function to convert directly from Fahrenheit to Celsius,
-> > by reusing these two functions above
+> > 바로 위에 정의된 함수 두개를 재사용해서 화씨온도에서 바로 섭씨온도로 
+> > 변환하는 함수를 정의한다.
 > >
 > >
 > > ```{r}
@@ -281,41 +288,43 @@ fahr_to_kelvin(temp = as.factor(32))
 Now, we're going to define a function that calculates the Gross Domestic Product
 of a nation from the data available in our dataset:
 
+이제 데이터셋에서 한 국가에 대한 국내총생산(GDP)를 계산하는 함수를 작성한다:
+
 ```{r}
-# Takes a dataset and multiplies the population column
-# with the GDP per capita column.
+# 데이터셋을 인자로 받아, 1인당 GDP 칼럼과 인구수 칼럼을 곱한다.
 calcGDP <- function(dat) {
   gdp <- dat$pop * dat$gdpPercap
   return(gdp)
 }
 ```
 
-We define `calcGDP()` by assigning it to the output of `function`. The list of
-argument names are contained within parentheses. Next, the body of the function 
--- the statements executed when you call the function -- is contained within
-curly braces (`{}`).
+`function` 출력을 대입하는 `calcGDP()` 함수를 정의한다.
+인자 명칭 리스트는 괄호 안에 담겨진다.
+다음으로 함수 몸통부문
+(함수를 실행할 때 실행되는 문장)이 
+괄호(`{}`) 내부에 담겨진다.
 
-We've indented the statements in the body by two spaces. This makes the code
-easier to read but does not affect how it operates.
+몸통부문 문장을 공백 2 개로 들여쓰기한다.
+들여쓰면, 코드 가독성이 높아지지만, 코드 동작에는 영향을 끼치지 않는다.
 
-When we call the function, the values we pass to it are assigned to the
-arguments, which become variables inside the body of the function.
+함수를 호출할 때, 함수에 전달되는 값이 인자에 대입된다.
+전달되는 값은 함수 몸통 내부에서 변수가 된다.
 
-Inside the function, we use the `return()` function to send back the result.
-This `return()` function is optional: R will automatically return the results of
-whatever command is executed on the last line of the function.
+함수 내부에서, `return()` 함수를 사용해서 결과를 함수밖으로 배출한다.
+반환 `return()` 함수는 선택옵션이다:
+R은 자동으로 함수 마지막 줄에 실행되는 어떤 명령어든 결과를 반환한다.
 
 
 ```{r}
 calcGDP(head(gapminder))
 ```
 
-That's not very informative. Let's add some more arguments so we can extract
-that per year and country.
+그다지 유용한 정보는 아니다.
+인자를 일부 추가해서 연도별, 국가별 GDP를 추출한다.
+
 
 ```{r}
-# Takes a dataset and multiplies the population column
-# with the GDP per capita column.
+# 데이터셋을 인자로 받아, 1인당 GDP 칼럼과 인구수 칼럼을 곱한다.
 calcGDP <- function(dat, year=NULL, country=NULL) {
   if(!is.null(year)) {
     dat <- dat[dat$year %in% year, ]
@@ -330,50 +339,53 @@ calcGDP <- function(dat, year=NULL, country=NULL) {
 }
 ```
 
-If you've been writing these functions down into a separate R script
-(a good idea!), you can load in the functions into our R session by using the
-`source()` function:
+별도 R 스크립트 파일에 상기 함수를 작성했다면(좋은 아이디어!), `source()` 함수를 
+사용해서 R 세션에 함수를 올려 적재할 수 있다:
+
 
 ```{r, eval=FALSE}
 source("functions/functions-lesson.R")
 ```
 
-Ok, so there's a lot going on in this function now. In plain English, the
-function now subsets the provided data by year if the year argument isn't empty,
-then subsets the result by country if the country argument isn't empty. Then it 
-calculates the GDP for whatever subset emerges from the previous two steps. The 
-function then adds the GDP as a new column to the subsetted data and returns
-this as the final result. You can see that the output is much more informative
-than a vector of numbers.
+이제 함수에 상당히 많은 일을 하고 있네요.
+쉬운 말로 풀어쓰면, 연도 `year` 인자가 비어있지 않는다면,
+함수가 전달된 연도 정보로 부분집합 데이터를 생성하고 나서,
+국가 `country` 인자가 비어있지 않는다면,
+함수가 전달된 국가 정보로 부분집합 데이터를 생성한다.
+그리고 나서, 연도와 국가 인자에서 추출된 부분집합에 대해 
+GDP를 계산한다.
+그리고 나서, 함수가 GDP를 신규 칼럼으로 추가해서 부분집합으로 뽑아낸 데이터셋에서
+추가하고 최종 결과로 반환한다.
+숫자 벡터로 쭉 뽑혀진 것보다 출력결과가 훨씬 더 유용한 정보를 제공함을 알 수 있다.
 
-Let's take a look at what happens when we specify the year:
+연도를 인자로 명세할 때 어떤 일이 발생하는지 살펴보자:
 
 ```{r}
 head(calcGDP(gapminder, year=2007))
 ```
 
-Or for a specific country:
+혹은 특정 국가를 인자로 전달하면 어떻게 되는지 살펴보자:
 
 ```{r}
 calcGDP(gapminder, country="Australia")
 ```
 
-Or both:
+혹은, 연도와 국가를 모두 인자로 전달하면 어떻게 되는지 살펴보자:
 
 ```{r}
 calcGDP(gapminder, year=2007, country="Australia")
 ```
 
-Let's walk through the body of the function:
+함수 몸통부문을 살펴본다:
 
 ``` {r, eval=FALSE}
 calcGDP <- function(dat, year=NULL, country=NULL) {
 ```
 
-Here we've added two arguments, `year`, and `country`. We've set
-*default arguments* for both as `NULL` using the `=` operator
-in the function definition. This means that those arguments will
-take on those values unless the user specifies otherwise.
+위에서 인자 두개 `year`, `country`를 추가했다.
+함수 정의부에서 *기본디폴트 인자*를 모두 `=` 연산자를 사용해서 `NULL`로 설정했다.
+이것이 의미하는 바는 사용자가 달리 인자를 설정하지 않는다면,
+각 인자에 `NULL` 값을 인자로 넘기게 된다.
 
 ```{r, eval=FALSE}
   if(!is.null(year)) {
@@ -384,41 +396,43 @@ take on those values unless the user specifies otherwise.
   }
 ```
 
-Here, we check whether each additional argument is set to `null`, and whenever
-they're not `null` overwrite the dataset stored in `dat` with a subset given by 
-the non-`null` argument.
+여기서, 각기 추가되는 인자가 `null` 로 설정되었는지 검사한다.
+`null` 이 아닌 경우, `null`이 아닌 인자로 부분집합 데이터로 뽑아내려고
+`dat`에 저장된 데이터셋을 덮어쓴다.
 
-I did this so that our function is more flexible for later. We can ask it to
-calculate the GDP for:
+추후에 좀더 유연하게 함수를 작성할 예정이다.
+따라서, GDP를 다음 질문에 대해 답할 수 있다:
 
- * The whole dataset;
- * A single year;
- * A single country;
- * A single combination of year and country.
+ * 전체 데이터셋;
+ * 단일 연도;
+ * 단일 국가;
+ * 단일 연도와 단일국가 조합.
 
-By using `%in%` instead, we can also give multiple years or countries to those
-arguments.
+대신에 `%in%` 연산자를 사용해서, 여러 연도와 국가를 인자에 넘길 수 있다.
 
-> ## Tip: Pass by value
+> ## Tip: 값에 의한 전달
 >
-> Functions in R almost always make copies of the data to operate on
-> inside of a function body. When we modify `dat` inside the function
-> we are modifying the copy of the gapminder dataset stored in `dat`,
-> not the original variable we gave as the first argument.
+> R에 함수는 거의 항상 데이터 사본을 생성해서 함수 몸통 내부에서  
+> 연산 작업을 수행한다.
+> 함수 내부 `dat` 데이터를 변경할 때, 
+> 첫 인자로 전달한 원본 데이터가 아닌 `dat`에 저장된 `gapminder` 데이터셋
+> 사본을 조작하는 것이다.
 >
-> This is called "pass-by-value" and it makes writing code much safer:
-> you can always be sure that whatever changes you make within the
-> body of the function, stay inside the body of the function.
+> 이를 "값에 의한 전달(pass-by-value)" 라고 부르며,
+> 코드 작성을 훨씬 더 안전하게 한다:
+> 함수 몸통부문 내부에서 어떤 변경을 하든, 함수 몸통부문에 한정된 것이라는 것을
+> 항상 확실히 할 수 있다.
 {: .callout}
 
-> ## Tip: Function scope
+> ## Tip: 함수 유효범위(Function scope)
 >
-> Another important concept is scoping: any variables (or functions!) you
-> create or modify inside the body of a function only exist for the lifetime
-> of the function's execution. When we call `calcGDP()`, the variables `dat`,
-> `gdp` and `new` only exist inside the body of the function. Even if we
-> have variables of the same name in our interactive R session, they are
-> not modified in any way when executing a function.
+> 또한가지 중요한 개념이 유효범위(scoping)다: 
+> 함수 몸통부문 내부에서 생성하거나 변경한 어떤 변수(혹은 함수!)는 
+> 함수 실행 기간동안만 존재한다.
+> `calcGDP` 함수를 호출할 때, 변수 `dat`,
+> `gdp`, `new`는 함수 몸통 내부에서만 존재한다.
+> 설사 인터랙티브 세션에서 동일한 명칭을 갖는 변수가 있더라도,
+> 함수가 시행될 때, 어떤 방식으로도 변경되지 않는다.
 {: .callout}
 
 ```{r, eval=FALSE}
@@ -428,10 +442,10 @@ arguments.
 }
 ```
 
-Finally, we calculated the GDP on our new subset, and created a new data frame
-with that column added. This means when we call the function later we can see
-the context for the returned GDP values, which is much better than in our first 
-attempt where we got a vector of numbers.
+마지막으로, 신규 부분집합 데이터셋에 GDP를 계산하고,
+신규 데이터프레임을 생성하고  동일한 명칭을 갖는 칼럼을 추가한다.
+즉, 나중에 함수를 호출할 때, 반환된 GDP 값에 대한 맥락을 찾아볼 수 있다는 것이다.
+앞서 숫자 벡터보다 이런 점에서 훨씬 더 낫다.
 
 > ## Challenge 4
 >
@@ -452,29 +466,28 @@ attempt where we got a vector of numbers.
 
 > ## Challenge 5
 >
-> The `paste()` function can be used to combine text together, e.g:
+> `paste` 함수를 사용해서 텍스트를 결합할 수 있다, 즉:
 >
 > ```{r}
 > best_practice <- c("Write", "programs", "for", "people", "not", "computers")
 > paste(best_practice, collapse=" ")
 > ```
 >
->  Write a function called `fence()` that takes two vectors as arguments, called
-> `text` and `wrapper`, and prints out the text wrapped with the `wrapper`:
+> `text` 와 `wrapper`라는 벡터 인자 두개를 받는 `fence`라는 함수를 작성한다.
+>  함수는 `wrapper`로 둘러싼 텍스트를 출력한다:
 >
 > ```{r, eval=FALSE}
 > fence(text=best_practice, wrapper="***")
 > ```
 >
-> *Note:* the `paste()` function has an argument called `sep`, which specifies
-> the separator between text. The default is a space: " ". The default for
-> `paste0()` is no space "".
+> *주목:* `paste` 함수는 `sep` 라는 인자를 갖는데,
+> `sep` 인자는 텍스트 사이 구분자를 명세한다.
+> 기본디폴트 설정은 공백이다: " ". `paste0` 함수에 대한 기본디폴트 설정은 공백이 없음이다:"".
 >
-> > ## Solution to challenge 5
+> > ## 도전과제 5에 대한 해답
 > >
-> >  Write a function called `fence()` that takes two vectors as arguments,
-> > called `text` and `wrapper`, and prints out the text wrapped with the
-> > `wrapper`:
+> > `text` 와 `wrapper`라는 벡터 인자 두개를 받는 `fence`라는 함수를 작성한다.
+> >  함수는 `wrapper`로 둘러싼 텍스트를 출력한다:
 > >
 > > ```{r}
 > > fence <- function(text, wrapper){
@@ -490,12 +503,12 @@ attempt where we got a vector of numbers.
 
 > ## Tip
 >
-> R has some unique aspects that can be exploited when performing more
-> complicated operations. We will not be writing anything that requires
-> knowledge of these more advanced concepts. In the future when you are
-> comfortable writing functions in R, you can learn more by reading the
-> [R Language Manual][man] or this [chapter][] from
-> [Advanced R Programming][adv-r] by Hadley Wickham.
+> 더 복잡한 연산작업을 수행할 때, 정말 잘 활용될 수 있는 R에만 있는 유일무이한 기능이 있다.
+> 이러한 고급 개념으로 무장한 함수는 작성하지 않을 것이다.
+> 향후, R로 함수를 작성하는데 무리가 없다면,
+> [R Language Manual][man]과 Hadley Wickham 저서  [Advanced R Programming][adv-r]
+> 책에 포함된 [환경][chapter]을 참조한다.
+> R은 프레임(frame) 대신에 "환경(environment)"을 용어로 사용한다.
 {: .callout}
 
 [man]: http://cran.r-project.org/doc/manuals/r-release/R-lang.html#Environment-objects
@@ -503,33 +516,31 @@ attempt where we got a vector of numbers.
 [adv-r]: http://adv-r.had.co.nz/
 
 
-> ## Tip: Testing and documenting
+> ## Tip: 테스트와 문서화
 >
-> It's important to both test functions and document them:
-> Documentation helps you, and others, understand what the
-> purpose of your function is, and how to use it, and its
-> important to make sure that your function actually does
-> what you think.
 >
-> When you first start out, your workflow will probably look a lot
-> like this:
+> 함수를 테스트하고 문서화하는 것 모두 중요하다:
+> 문서화를 하게 되면 여러분과 다른 독자가 작성된 함수 목적과
+> 사용법을 이해하는데 도움이 된다.
+> 작성된 함수가 생각한 대로 실제로 동작하는지 확실히 하는 것도 중요하다.
 >
->  1. Write a function
->  2. Comment parts of the function to document its behaviour
->  3. Load in the source file
->  4. Experiment with it in the console to make sure it behaves
->     as you expect
->  5. Make any necessary bug fixes
->  6. Rinse and repeat.
+> 처음 시작할 때, 작업흐름은 아마도 다음과 같다:
 >
-> Formal documentation for functions, written in separate `.Rd`
-> files, gets turned into the documentation you see in help
-> files. The [roxygen2][] package allows R coders to write documentation
-> alongside the function code and then process it into the appropriate `.Rd`
-> files. You will want to switch to this more formal method of writing
-> documentation when you start writing more complicated R projects.
+>  1. 함수를 작성한다.
+>  2. 함수 일부에 동작을 문서화하는 주석을 단다.
+>  3. 소스 파일에 적재해서 불러온다.
+>  4. 콘솔에서 예상한 대로 동작을 확인하는 실험을 한다.
+>  5. 필요한 버그를 제거한다.
+>  6. 깔끔하게 하고, 상기 과정을 반복한다.
 >
-> Formal automated tests can be written using the [testthat][] package.
+> 함수에 대한 공식 문서는 별도 `.Rd` 파일에 작성되는데,
+> 도움말 파일에서 보게 되는 문서로 변환된다.
+> [roxygen2][] 팩키지는 R 프로그래머가 함수 코드와 함께 문서를 
+> 작성하게 돕고, 이 파일을 처리하게 되면 적절한 `.Rd` 파일로 떨군다.
+> 더 복잡한 R 프로젝트 코드를 작성할 때, 
+> 문서를 작성하는 공식적인 방법으로 전환하면 된다. 
+>
+> 공식 자동화 테스트는 [testthat][] 팩키지를 사용해서 작성된다.
 {: .callout}
 
 [roxygen2]: http://cran.r-project.org/web/packages/roxygen2/vignettes/rd.html
