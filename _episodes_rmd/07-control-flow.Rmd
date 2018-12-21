@@ -1,16 +1,16 @@
 ---
-title: Control Flow
+title: "제어 흐름"
 teaching: 45
 exercises: 20
 questions:
-- "How can I make data-dependent choices in R?"
-- "How can I repeat operations in R?"
+- "R로 데이터 의존적인 선택을 강제하는 방법은 무엇인가?"
+- "R로 어떻게 하면 연산작업을 반복할 수 있을까?"
 objectives:
-- "Write conditional statements with `if()` and `else()`."
-- "Write and understand `for()` loops."
+- "`if` 와 `else` 를 갖는 조건문을 작성한다."
+- "`for` 루프를 이해하고 작성한다."
 keypoints:
-- "Use `if` and `else` to make choices."
-- "Use `for` to repeat operations."
+- "`if` 와 `else` 를 사용하여 선택을 한다."
+- "`for` 루프를 사용하여 연산작업을 반복한다."
 source: Rmd
 ---
 
@@ -23,12 +23,13 @@ gapminder <- read.csv("data/gapminder_data.csv", header=TRUE)
 set.seed(10)
 ```
 
-Often when we're coding we want to control the flow of our actions. This can be done
-by setting actions to occur only if a condition or a set of conditions are met.
-Alternatively, we can also set an action to occur a particular number of times.
+종종 코딩할 때, 동작 흐름을 제어하고 싶을 때가 있다. 
+한 조건 혹은 조건 집합이 만족될 때만 동작이 일어나게 설정함으로써 이런 작업을 수행한다. 
+또 다른 방식으로, 특정 횟수만큼 동작이 일어나도록 설정할 수도 있다.
 
-There are several ways you can control flow in R.
-For conditional statements, the most commonly used approaches are the constructs:
+R에서 흐름을 제어하는 방식이 몇가지 있다. 
+조건문에 대해서, 가장 흔히 사용되는 접근법이 루프 구성체(loop construct)다:
+
 
 ```{r, eval=FALSE}
 # if
@@ -44,7 +45,7 @@ if (condition is true) {
 }
 ```
 
-Say, for example, that we want R to print a message if a variable `x` has a particular value:
+예를 들어, 변수 `x`가 특정값을 갖게 되면, 메시지를 출력하게 R에게 지시할 수도 있다:
 
 ```{r}
 x <- 8
@@ -56,7 +57,11 @@ if (x >= 10) {
 x
 ```
 
-The print statement does not appear in the console because x is not greater than 10. To print a different message for numbers less than 10, we can add an `else` statement.
+콘솔에 `print` 출력문이 아무것도 출력시키지 않는데,
+이유는 `x`가 10보다 크지 않기 때문이다.
+
+10보다 작은 값에 대해 메시지를 출력시키려면, 
+`else`문을 추가시키면 된다.
 
 ```{r}
 x <- 8
