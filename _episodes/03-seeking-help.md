@@ -142,11 +142,11 @@ other attached packages:
 loaded via a namespace (and not attached):
  [1] Rcpp_0.12.18     Rttf2pt1_1.3.7   bindr_0.1.1      magrittr_1.5    
  [5] tidyselect_0.2.4 munsell_0.5.0    colorspace_1.3-2 R6_2.2.2        
- [9] rlang_0.2.2      plyr_1.8.4       dplyr_0.7.6      tools_3.5.1     
+ [9] rlang_0.3.0.1    plyr_1.8.4       dplyr_0.7.6      tools_3.5.1     
 [13] grid_3.5.1       gtable_0.2.0     extrafontdb_1.0  withr_2.1.2     
 [17] lazyeval_0.2.1   assertthat_0.2.0 tibble_1.4.2     crayon_1.3.4    
 [21] bindrcpp_0.2.2   purrr_0.2.5      evaluate_0.11    glue_1.3.0      
-[25] stringi_1.2.4    compiler_3.5.1   pillar_1.3.0     scales_1.0.0    
+[25] stringi_1.2.4    compiler_3.5.1   pillar_1.3.1     scales_1.0.0    
 [29] pkgconfig_2.0.1 
 ~~~
 {: .output}
